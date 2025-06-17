@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Internet Security Scanner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0f0f0f;
+      --text-color: #00ff00;
+      --btn-bg: #1f1f1f;
+      --btn-border: #00ff00;
+      --output-bg: #000;
+      --disclaimer-color: red;
+      --progress-bg: #333;
+      --progress-fill: #00ff00;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Share Tech Mono', monospace;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+    }
+    .scanner-options {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+    }
+    .scanner-btn {
+      background-color: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      padding: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .scanner-btn:hover {
+      background-color: var(--text-color);
+      color: var(--bg-color);
+    }
+    .output {
+      margin-top: 30px;
+      white-space: pre-wrap;
+      background-color: var(--output-bg);
+      padding: 20px;
+      border: 1px solid var(--btn-border);
+      height: 300px;
+      overflow-y: auto;
+    }
+    .disclaimer {
+      color: var(--disclaimer-color);
+      font-size: 0.9rem;
+      margin-top: 15px;
+    }
+    .scan-line {
+      width: 100%;
+      height: 4px;
+      background: var(--text-color);
+      animation: scan 1s infinite;
+      margin: 20px 0;
+    }
+    .progress-bar {
+      width: 100%;
+      background: var(--progress-bg);
+      border: 1px solid var(--btn-border);
+      height: 20px;
+      margin-top: 20px;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: var(--progress-fill);
+      transition: width 0.5s;
+    }
+    .purchase-section {
+      margin-top: 40px;
+      border: 1px solid var(--btn-border);
+      padding: 20px;
+      background-color: #111;
+    }
+    .purchase-section h2 {
+      color: #00ff00;
+    }
+    .purchase-section p {
+      margin-top: 10px;
+    }
+    .purchase-options {
+      margin-top: 10px;
+    }
+    .purchase-options span {
+      display: inline-block;
+      margin-right: 15px;
+    }
+    @keyframes scan {
+      0% {opacity: 0.2;}
+      50% {opacity: 1;}
+      100% {opacity: 0.2;}
+    }
+  </style>
+</head>
+<body>
+  <h1>Internet Security Scanner</h1>
+
+  <div class="scanner-options">
+    <div class="scanner-btn" onclick="startScan('firewall')">Firewall Scan</div>
+    <div class="scanner-btn" onclick="startScan('virus')">Virus Scan</div>
+    <div class="scanner-btn" onclick="startScan('hacker')">Hacking Software Scan</div>
+  </div>
+
+  <div class="scan-line"></div>
+  <div class="output" id="output">
+    Select a scan to begin...
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="disclaimer" id="disclaimer"></div>
+  <div class="disclaimer">
+    ** This is a paid version of the Internet Security Scanner intended for commercial use only. Security protection can be added to the internet firewall after purchasing the full package. **
+  </div>
+
+  <div class="purchase-section">
+    <h2>Purchase Full Internet Security Package</h2>
+    <p>If you intend to buy the full package of internet security for personal/consumer use, the cost is <strong>$699.00 for 1 year</strong>.</p>
+    <p>Payment options available:</p>
+    <div class="purchase-options">
+      <span>✔ PayPal</span>
+      <span>✔ CashApp</span>
+      <span>✔ Chime</span>
+    </div>
+    <p>Once your payment is confirmed, a confirmation email will be sent from <strong>Coinbase</strong>, and the security protection will be placed on your internet firewall for a full 1 year.</p>
+  </div>
+
+  <script>
+    function startScan(type) {
+      const output = document.getElementById('output');
+      const disclaimer = document.getElementById('disclaimer');
+      const progressFill = document.getElementById('progressFill');
+
+      output.innerHTML = '> Scan started. Please wait...';
+      disclaimer.innerHTML = '* This is a simulated scan. Results will display after the scan completes.';
+      progressFill.style.width = '0%';
+
+      let progress = 0;
+      const scanDuration = 60000; // 1 minute
+      const progressInterval = 1000;
+      const totalTicks = scanDuration / progressInterval;
+
+      let tick = 0;
+      const interval = setInterval(() => {
+        tick++;
+        progress = Math.floor((tick / totalTicks) * 100);
+        progressFill.style.width = progress + '%';
+        output.innerHTML = `> Scanning... (${progress}%)`;
+        output.scrollTop = output.scrollHeight;
+
+        if (tick >= totalTicks) {
+          clearInterval(interval);
+
+          let result = '';
+          if (type === 'firewall') {
+            result = `\n\n> WARNING: Firewall breach detected!\nStatus: COMPROMISED\n\n--- DETAILS ---\nFirewall is a security system that monitors and controls incoming/outgoing network traffic.\nIf compromised, attackers may gain unauthorized access to your internal systems.\nSensitive data may be exposed and malicious software could be installed.\nImmediate action is recommended.`;
+          } else if (type === 'virus') {
+            result = `\n\n> 3 VIRUSES FOUND:\n- Trojan.Injector.Win32\n- Worm.Generic.AutoRun\n- Riskware.Tool.CK\nQuarantine recommended.`;
+          } else if (type === 'hacker') {
+            result = `\n\n> 2 POTENTIAL HACKING TOOLS DETECTED:\n- Keylogger.exe\n- RAT.Server.Hidden\nDisable immediately and report.`;
+          }
+
+          output.innerHTML = `> Scan complete.` + result;
+          output.scrollTop = output.scrollHeight;
+        }
+      }, progressInterval);
+    }
+  </script>
+</body>
+</html>
